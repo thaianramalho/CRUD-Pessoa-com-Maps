@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         "${cursor.getString(cursor.getColumnIndexOrThrow(StudentDatabaseHelper.COLUMN_STATE))}, " +
                         "${cursor.getString(cursor.getColumnIndexOrThrow(StudentDatabaseHelper.COLUMN_COUNTRY))}"
 
-                val latLng = LatLng(0.0, 0.0) // Convert address to LatLng
+                val latLng = LatLng(0.0, 0.0)
                 googleMap?.addMarker(MarkerOptions().position(latLng).title(address))
                 googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 val geocoder = Geocoder(this, Locale.getDefault())
@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 progressBar.visibility = ProgressBar.VISIBLE
                 thread {
-                    Thread.sleep(2000) // Simulate loading time
+                    Thread.sleep(2000)
                     runOnUiThread {
                         progressBar.visibility = ProgressBar.GONE
                     }
