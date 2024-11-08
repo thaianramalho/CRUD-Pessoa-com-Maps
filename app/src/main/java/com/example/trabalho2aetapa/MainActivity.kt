@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapButton = findViewById(R.id.mapButton)
         clearButton = findViewById(R.id.clearButton)
 
-
+        Toast.makeText(this, "Dupla: Thaian Ramalho e Samir Ribeiro", Toast.LENGTH_LONG).show()
 
         listView.setOnItemClickListener { _, _, position, _ ->
             val cursor = listView.adapter.getItem(position) as Cursor
