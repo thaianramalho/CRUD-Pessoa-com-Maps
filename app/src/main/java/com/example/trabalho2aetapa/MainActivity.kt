@@ -15,11 +15,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.doOnTextChanged
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
@@ -57,7 +55,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_main)
 
         dbHelper = StudentDatabaseHelper(this)
-
         listView = findViewById(R.id.listView)
         nameEditText = findViewById(R.id.nameEditText)
         emailEditText = findViewById(R.id.emailEditText)
@@ -70,7 +67,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         updateButton = findViewById(R.id.updateButton)
         deleteButton = findViewById(R.id.deleteButton)
         mapButton = findViewById(R.id.mapButton)
-        progressBar = findViewById(R.id.progressBar)
         clearButton = findViewById(R.id.clearButton)
 
 
@@ -125,30 +121,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.map_dialog)
-        dialog.setCancelable(true)
-
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapDialogFragment) as SupportMapFragment
-        mapFragment.getMapAsync { googleMap ->
-            val geocoder = Geocoder(this, Locale.getDefault())
-            val addresses: List<Address>? = geocoder.getFromLocationName(selectedAddress!!, 1)
-            if (!addresses.isNullOrEmpty()) {
-                val location = addresses[0]
-                val latLng = LatLng(location.latitude, location.longitude)
-                googleMap.addMarker(MarkerOptions().position(latLng).title(selectedAddress))
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            } else {
-                Toast.makeText(this, "Unable to find location", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        dialog.findViewById<Button>(R.id.closeButton).setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
+        // Crie e exiba o MapDialogFragment
+        val dialogFragment = MapDialogFragment(selectedAddress!!)
+        dialogFragment.show(supportFragmentManager, "MapDialogFragment")
     }
+
+
+
 
     private fun buildAddress(): String {
         val street = findViewById<EditText>(R.id.streetEditText).text.toString()
