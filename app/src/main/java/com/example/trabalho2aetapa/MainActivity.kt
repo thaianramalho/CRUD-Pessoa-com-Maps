@@ -1,6 +1,7 @@
 package com.example.trabalho2aetapa
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var selectedStudentId: Int? = null
     private var googleMap: GoogleMap? = null
+    private var selectedAddress: String? = null
+
 
 
     companion object {
@@ -101,17 +104,59 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mapButton.setOnClickListener {
-            openMap()
+            openMapDialog()
         }
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+
 
         checkLocationPermission()
+        loadStudents()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
+    }
+
+    private fun openMapDialog() {
+        selectedAddress = buildAddress()
+
+        if (selectedAddress.isNullOrEmpty()) {
+            Toast.makeText(this, "Please select a student with a valid address", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.map_dialog)
+        dialog.setCancelable(true)
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapDialogFragment) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+            val geocoder = Geocoder(this, Locale.getDefault())
+            val addresses: List<Address>? = geocoder.getFromLocationName(selectedAddress!!, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val location = addresses[0]
+                val latLng = LatLng(location.latitude, location.longitude)
+                googleMap.addMarker(MarkerOptions().position(latLng).title(selectedAddress))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            } else {
+                Toast.makeText(this, "Unable to find location", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.findViewById<Button>(R.id.closeButton).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun buildAddress(): String {
+        val street = findViewById<EditText>(R.id.streetEditText).text.toString()
+        val number = findViewById<EditText>(R.id.numberEditText).text.toString()
+        val city = findViewById<EditText>(R.id.cityEditText).text.toString()
+        val state = findViewById<EditText>(R.id.stateEditText).text.toString()
+        val country = findViewById<EditText>(R.id.countryEditText).text.toString()
+        return "$street, $number, $city, $state, $country"
     }
 
     private fun checkLocationPermission() {
