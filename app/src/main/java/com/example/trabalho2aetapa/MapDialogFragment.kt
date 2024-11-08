@@ -29,7 +29,6 @@ class MapDialogFragment(private val selectedAddress: String) : DialogFragment(),
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
-        // Configura o fragmento do mapa
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapContainer) as SupportMapFragment?
             ?: SupportMapFragment.newInstance().also {
                 childFragmentManager.beginTransaction().replace(R.id.mapContainer, it).commit()
@@ -56,7 +55,7 @@ class MapDialogFragment(private val selectedAddress: String) : DialogFragment(),
             googleMap.addMarker(MarkerOptions().position(latLng).title(selectedAddress))
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         } else {
-            Toast.makeText(context, "Unable to find location", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Não foi possível encontrar a localização", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.trabalho2aetapa
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -117,11 +116,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         selectedAddress = buildAddress()
 
         if (selectedAddress.isNullOrEmpty()) {
-            Toast.makeText(this, "Please select a student with a valid address", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, selecione um aluno com um endereço válido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Crie e exiba o MapDialogFragment
         val dialogFragment = MapDialogFragment(selectedAddress!!)
         dialogFragment.show(supportFragmentManager, "MapDialogFragment")
     }
@@ -153,7 +151,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val country = countryEditText.text.toString()
 
         if (name.isEmpty() || email.isEmpty() || street.isEmpty() || number.isEmpty() || city.isEmpty() || state.isEmpty() || country.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -183,7 +181,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val country = countryEditText.text.toString()
 
             if (name.isEmpty() || email.isEmpty() || street.isEmpty() || number.isEmpty() || city.isEmpty() || state.isEmpty() || country.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
                 return
             }
 
@@ -276,7 +274,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     googleMap?.addMarker(MarkerOptions().position(latLng).title(address))
                     googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 } else {
-                    Toast.makeText(this, "Unable to find location", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Não foi possível encontrar a localização", Toast.LENGTH_SHORT).show()
                 }
                 progressBar.visibility = ProgressBar.VISIBLE
                 thread {
@@ -313,7 +311,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         companion object {
             const val DATABASE_NAME = "students.db"
-            const val DATABASE_VERSION = 2
+            const val DATABASE_VERSION = 3
             const val TABLE_NAME = "students"
             const val COLUMN_ID = "_id"
             const val COLUMN_NAME = "name"
